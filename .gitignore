@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+*.egg-info/
+.env
+
+# Model artifacts
+data/models/*.bin
+data/models/*.pt
+data/models/*.pkl
+!data/models/sample/*
+
+# IDE
+.vscode/
+.idea/
+
+# Tests
+.pytest_cache/
+coverage_html/
+coverage.xml
+
+# Build
+dist/
+build/
