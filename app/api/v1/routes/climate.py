@@ -1,3 +1,4 @@
+import logging
 from fastapi import APIRouter, Depends, HTTPException
 from app.climate.service import ClimateService
 from ..schemas import (
@@ -6,6 +7,7 @@ from ..schemas import (
     AggregatedClimateData, YearlyClimateResponse
 )
 
+logger = logging.getLogger(__name__)
 router = APIRouter(tags=["climate"], prefix="/climate")
 
 # Simple dependency provider
@@ -27,12 +29,16 @@ async def get_aggregated_climate_data(
     4. Applies Köppen and Trewartha climate classification to averaged data
     5. Returns single classification for the entire period
     """
+    logger.info(f"Aggregated climate data requested for {request.city}, years: {request.years}")
+    
     try:
         # Get aggregated climate data using the enhanced service
         location, avg_monthly_temps, avg_monthly_precip, classification, distance_km = service.get_aggregated_climate_data(
             city=request.city,
             years=request.years
         )
+        
+        logger.info(f"Successfully retrieved aggregated data for {request.city} (distance: {distance_km:.2f}km)")
         
         # Create location data
         location_data = LocationData(
@@ -64,8 +70,10 @@ async def get_aggregated_climate_data(
         )
         
     except ValueError as e:
+        logger.error(f"Client error for {request.city}: {e}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Internal server error for {request.city}: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 
 
@@ -82,12 +90,16 @@ async def get_yearly_climate_data(
     3. Applies Köppen and Trewartha climate classification to each year individually
     4. Returns dictionary of year → classification mappings
     """
+    logger.info(f"Yearly climate data requested for {request.city}, years: {request.years}")
+    
     try:
         # Get yearly climate data using the enhanced service
         location, year_classifications, distance_km = service.get_yearly_climate_data(
             city=request.city,
             years=request.years
         )
+        
+        logger.info(f"Successfully retrieved yearly data for {request.city} (distance: {distance_km:.2f}km)")
         
         # Create location data
         location_data = LocationData(
@@ -117,7 +129,9 @@ async def get_yearly_climate_data(
         )
         
     except ValueError as e:
+        logger.error(f"Client error for {request.city}: {e}")
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
+        logger.error(f"Internal server error for {request.city}: {e}")
         raise HTTPException(status_code=500, detail=f"Internal server error: {str(e)}")
 

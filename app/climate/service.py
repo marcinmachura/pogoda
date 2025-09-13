@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from typing import List, Optional, Tuple
 from pathlib import Path
 
@@ -8,6 +9,8 @@ from .geocode import GeocodingService, GeoLocation, GeocodeError
 from .classifiers import classify_koppen, classify_trewartha, ClassificationError
 from ..core.config import get_settings
 
+logger = logging.getLogger(__name__)
+
 
 class ClimateService:
     """Climate service that integrates geocoding, real climate data, and climate classification."""
@@ -15,6 +18,7 @@ class ClimateService:
     def __init__(self):
         self.geocoding_service = GeocodingService()
         self.settings = get_settings()
+        logger.info("ClimateService initialized")
 
     def get_aggregated_climate_data(
         self, 
@@ -28,10 +32,14 @@ class ClimateService:
         Returns:
             Tuple of (location, avg_monthly_temps, avg_monthly_precip, classification, distance_km)
         """
+        logger.info(f"Getting aggregated climate data for {city}, years: {years}")
+        
         # Step 1: Geocode the city
         try:
             location = self.geocoding_service.geocode(city)
-        except GeocodeError:
+            logger.info(f"Geocoded {city} to ({location.latitude}, {location.longitude})")
+        except GeocodeError as e:
+            logger.error(f"Geocoding failed for {city}: {e}")
             raise ValueError(f"Could not find location for city: {city}")
 
         # Step 2: Get raw monthly data from compact climate model
@@ -66,10 +74,14 @@ class ClimateService:
         Returns:
             Tuple of (location, year_classifications, distance_km)
         """
+        logger.info(f"Getting yearly climate data for {city}, years: {years}")
+        
         # Step 1: Geocode the city
         try:
             location = self.geocoding_service.geocode(city)
-        except GeocodeError:
+            logger.info(f"Geocoded {city} to ({location.latitude}, {location.longitude})")
+        except GeocodeError as e:
+            logger.error(f"Geocoding failed for {city}: {e}")
             raise ValueError(f"Could not find location for city: {city}")
 
         # Step 2: Get raw monthly data from compact climate model
@@ -100,6 +112,8 @@ class ClimateService:
             Tuple of (monthly_data, distance_km) where monthly_data has structure:
             {year: {'temps': [12 monthly temps], 'precips': [12 monthly precips]}}
         """
+        logger.debug(f"Getting monthly data for {location.city} at ({location.latitude}, {location.longitude})")
+        
         model_path = self.settings.active_model_path
         if not model_path.exists():
             # Try the compact model file that exists

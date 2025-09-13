@@ -18,6 +18,10 @@ data/models/*.pkl
 coverage_html/
 coverage.xml
 
+# Logs
+logs/
+*.log
+
 # Build
 dist/
 build/
