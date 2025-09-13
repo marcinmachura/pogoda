@@ -6,22 +6,21 @@ from app.climate.models import load_compact_climate_model
 
 
 class TestFindClosestLocationReal:
-    """Test find_closest_location with the real climate dataset."""
+    """Test find_closest_location with the test climate dataset."""
 
     def setup_method(self):
-        """Set up test fixtures using the real climate model."""
-        # Use the real climate model file
-        model_path = Path("data/models/climate_compact.pkl")
+        """Set up test fixtures using the test climate model."""
+        # Use the smaller test climate model file for faster tests
+        model_path = Path("data/models/climate_test.pkl")
         if not model_path.exists():
-            pytest.skip("Real climate model file not found")
+            pytest.skip("Test climate model file not found")
         
         self.model = load_compact_climate_model(model_path)
 
     def test_find_closest_to_known_location(self):
         """Test finding closest location to a known point in the dataset."""
-        # You mentioned (25.050001, -13.75) is in the dataset
-        # Let's search for something close to it
-        target_lat, target_lon = 25.0, -13.7
+        # Using a location from the test dataset (Spain region)
+        target_lat, target_lon = 40.4, -3.7
         
         # Act
         closest_lat, closest_lon, distance = self.model.find_closest_location(target_lat, target_lon)
@@ -31,15 +30,15 @@ class TestFindClosestLocationReal:
         print(f"Found closest: ({closest_lat}, {closest_lon})")
         print(f"Distance: {distance:.2f} km")
         
-        # Should find something close to the known location
-        assert abs(closest_lat - 25.050001) < 1.0, f"Expected lat ~25.05, got {closest_lat}"
-        assert abs(closest_lon - (-13.75)) < 1.0, f"Expected lon ~-13.75, got {closest_lon}"
-        assert distance < 100, f"Distance should be reasonable, got {distance} km"
+        # Should find something close in the European test dataset
+        assert abs(closest_lat - 40.35) < 1.0, f"Expected lat ~40.35, got {closest_lat}"
+        assert abs(closest_lon - (-3.75)) < 1.0, f"Expected lon ~-3.75, got {closest_lon}"
+        assert distance < 100, f"Should be close, got {distance} km"
 
     def test_find_closest_exact_match(self):
-        """Test finding exact match for the known coordinate."""
-        # Test with the exact coordinate you mentioned
-        target_lat, target_lon = 25.050001, -13.75
+        """Test finding exact match for a coordinate from the test dataset."""
+        # Use an exact coordinate from the test dataset (from Madrid area)
+        target_lat, target_lon = 40.349998, -3.750000
         
         # Act
         closest_lat, closest_lon, distance = self.model.find_closest_location(target_lat, target_lon)
@@ -50,18 +49,18 @@ class TestFindClosestLocationReal:
         print(f"Distance: {distance:.2f} km")
         
         # Should find the exact location or very close
-        assert abs(closest_lat - 25.050001) < 0.001, f"Expected exact match lat, got {closest_lat}"
-        assert abs(closest_lon - (-13.75)) < 0.001, f"Expected exact match lon, got {closest_lon}"
+        assert abs(closest_lat - 40.349998) < 0.001, f"Expected exact match lat, got {closest_lat}"
+        assert abs(closest_lon - (-3.750000)) < 0.001, f"Expected exact match lon, got {closest_lon}"
         assert distance < 1.0, f"Distance should be minimal for exact match, got {distance} km"
 
     def test_find_closest_nearby_points(self):
         """Test finding closest location for various nearby points."""
-        # Test points around the known location
+        # Test points around European locations in the test dataset
         test_points = [
-            (25.0, -13.8),      # Slightly west
-            (25.1, -13.7),      # Slightly north-east  
-            (24.9, -13.8),      # Slightly south-west
-            (25.2, -13.6),      # Further north-east
+            (40.4, -3.8),       # Near Madrid, Spain
+            (41.4, 2.2),        # Near Barcelona, Spain  
+            (52.5, 13.4),       # Near Berlin, Germany
+            (53.6, 10.0),       # Near Hamburg, Germany
         ]
         
         for test_lat, test_lon in test_points:
@@ -73,7 +72,7 @@ class TestFindClosestLocationReal:
             print(f"Found closest: ({closest_lat}, {closest_lon})")
             print(f"Distance: {distance:.2f} km")
             
-            # Should find something reasonably close
+            # Should find something reasonably close in the European test dataset
             assert distance < 200, f"Distance should be reasonable for ({test_lat}, {test_lon}), got {distance} km"
             assert isinstance(closest_lat, float), "closest_lat should be float"
             assert isinstance(closest_lon, float), "closest_lon should be float"

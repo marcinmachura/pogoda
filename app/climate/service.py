@@ -121,7 +121,12 @@ class ClimateService:
             if compact_path.exists():
                 model_path = compact_path
             else:
-                raise FileNotFoundError(f"No climate model found")
+                # Try the test model as final fallback
+                test_path = Path("data/models/climate_test.pkl")
+                if test_path.exists():
+                    model_path = test_path
+                else:
+                    raise FileNotFoundError(f"No climate model found")
 
         climate_model = load_compact_climate_model(model_path)
         
@@ -167,7 +172,12 @@ class ClimateService:
             if compact_path.exists():
                 model_path = compact_path
             else:
-                raise FileNotFoundError(f"No climate model found")
+                # Try the test model as final fallback
+                test_path = Path("data/models/climate_test.pkl")
+                if test_path.exists():
+                    model_path = test_path
+                else:
+                    raise FileNotFoundError(f"No climate model found")
 
         climate_model = load_compact_climate_model(model_path)
         

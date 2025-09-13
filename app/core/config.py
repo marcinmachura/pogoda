@@ -12,8 +12,8 @@ class Settings:
     default_start_year: int = 1990
     default_end_year: int = 2020
     model_dir: Path = Path("data/models")
-    model_filename: str = "climate_full.bin"  # full size (~400MB) expected
-    sample_model_filename: str = "climate_sample.bin"  # tiny test model (~1MB)
+    model_filename: str = "climate_compact.pkl"  # main model file
+    sample_model_filename: str = "climate_test.pkl"  # smaller test model
     use_sample_model: bool = False  # toggle for tests/dev
 
     @property
@@ -30,8 +30,8 @@ class Settings:
             default_start_year=int(os.getenv("DEFAULT_START_YEAR", "1990")),
             default_end_year=int(os.getenv("DEFAULT_END_YEAR", "2020")),
             model_dir=Path(os.getenv("MODEL_DIR", "data/models")),
-            model_filename=os.getenv("MODEL_FILENAME", "climate_full.bin"),
-            sample_model_filename=os.getenv("SAMPLE_MODEL_FILENAME", "climate_sample.bin"),
+            model_filename=os.getenv("MODEL_FILENAME", "climate_compact.pkl"),
+            sample_model_filename=os.getenv("SAMPLE_MODEL_FILENAME", "climate_test.pkl"),
             use_sample_model=os.getenv("USE_SAMPLE_MODEL", "false").lower() == "true",
         )
 
