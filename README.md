@@ -1,3 +1,13 @@
+# Goals
+TL;DR Climate != Weather. 
+What if we apply climate classifaction criterias to individual years?
+To do that on a scale I need a robust climate data.
+This code is using European climate data grid to compute short-term Koppen climate classes and see how it differs from actual climate and changes over time
+
+TODO .nc data converter to json
+TODO generate a map
+TODO docker and contenerization 
+
 # Climate API & CLI
 
 A learning project using FastAPI that exposes climate classification data for a place and year range. Data is synthetic & deterministic for demonstration/testing.
