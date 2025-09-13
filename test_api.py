@@ -12,7 +12,7 @@ def test_climate_api():
     # Test 1: Yearly endpoint (returns classifications per year)
     print("Testing POST /api/v1/climate/yearly")
     yearly_data = {
-        "city": "London",
+        "city": "Antibes",
         "years": [2020, 2021, 2022]
     }
     
@@ -46,7 +46,7 @@ def test_climate_api():
     # Test 2: Aggregated endpoint (returns monthly averages and classification)
     print("Testing POST /api/v1/climate/aggregated")
     agg_data = {
-        "city": "Paris",
+        "city": "Antibes",
         "years": [2020, 2021, 2022]
     }
     
