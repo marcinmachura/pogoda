@@ -1,3 +1,15 @@
+"""Application configuration utilities.
+
+WHAT: Lightweight settings object (dataclass) with environment variable
+overrides and a cached accessor `get_settings()` used throughout the
+application for locating model files and default API parameters.
+
+WHY HERE: Central place for runtime configuration so other modules (service
+layer, API startup) do not directly read environment variables. This keeps
+logic testable without external side‑effects. No external web APIs touched
+here; only OS environment.
+"""
+
 import os
 from functools import lru_cache
 from pathlib import Path

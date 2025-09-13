@@ -1,3 +1,16 @@
+"""Pydantic models for Climate API v1.
+
+WHAT: Defines request/response validation & serialization schemas used by
+the climate endpoints (city/year requests, classification structures,
+aggregated & yearly responses, error shape).
+
+WHY HERE: Keeps transport-layer data contracts close to the versioned API
+namespace (`app.api.v1`). Separates them from internal dataclasses in
+`app.climate.models` to avoid leaking internal representations over HTTP.
+External APIs: None directly—these schemas are consumed by FastAPI for
+validation and OpenAPI documentation generation.
+"""
+
 from __future__ import annotations
 from typing import List, Optional
 from pydantic import BaseModel, Field, validator

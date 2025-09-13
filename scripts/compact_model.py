@@ -1,3 +1,14 @@
+"""Utility script to build compact climate model pickle from optimized JSON.
+
+WHAT: Streams `climate_optimized.json`, filters to European subset (test
+mode), packs data into a flattened numeric array + location index mapping
+and writes `climate_test.pkl` or `climate_compact.pkl`.
+
+WHY HERE: Lives under `scripts/` as an offline data preparation tool not
+needed at runtime by the API. External dependencies: local filesystem +
+NumPy only (no web APIs). Execution is manual and not imported by the app.
+"""
+
 from typing import *
 import json
 import numpy as np

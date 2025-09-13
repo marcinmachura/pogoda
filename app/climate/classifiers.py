@@ -1,3 +1,16 @@
+"""Simplified Köppen and Trewartha climate classification algorithms.
+
+WHAT: Implements pragmatic, testable versions of Köppen (`classify_koppen`)
+and Trewartha (`classify_trewartha`) classification returning a code plus
+details dictionary. Includes custom `ClassificationError` for invalid
+inputs.
+
+WHY HERE: Encapsulated within climate domain to keep scientific rules and
+threshold logic separate from service orchestration and API concerns.
+External APIs: None – pure computation from monthly temperature &
+precipitation sequences.
+"""
+
 from __future__ import annotations
 from typing import List, Dict, Tuple
 

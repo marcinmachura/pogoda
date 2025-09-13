@@ -1,3 +1,19 @@
+"""FastAPI application factory and HTTP middleware.
+
+WHAT: Defines the FastAPI `app` instance, configures logging, CORS, request
+timing middleware, mounts API routers (currently climate endpoints) and
+exposes a simple `/health` probe.
+
+WHY HERE: This is the top-level web entrypoint used by ASGI servers (e.g.
+`uvicorn app.main:app`). It centralizes cross‑cutting concerns (CORS,
+logging) before individual feature routers are registered. External
+dependencies touched here:
+    * FastAPI / Starlette middleware system
+    * Application settings via `app.core.config.get_settings`
+    * Includes router from `app.api.v1.routes.climate` which ultimately uses
+        geocoding (OpenStreetMap Nominatim) and the compact climate model.
+"""
+
 import logging
 import sys
 from datetime import datetime

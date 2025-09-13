@@ -1,3 +1,19 @@
+"""Domain service orchestrating geocoding, data extraction and classification.
+
+WHAT: `ClimateService` coordinates:
+    * Geocoding city names (OpenStreetMap Nominatim via `GeocodingService`)
+    * Loading / querying compact climate model pickle (local filesystem)
+    * Computing aggregated or per‑year monthly climate series
+    * Applying Köppen & Trewartha classification with graceful fallbacks.
+
+WHY HERE: Encapsulates domain logic separate from API routes so it can be
+unit/integration tested and reused (CLI, future batch jobs). External
+dependencies accessed indirectly:
+    * HTTP calls to Nominatim in `geocode.GeocodingService`
+    * Local model files under `data/models` via `load_compact_climate_model`.
+No FastAPI objects are imported here (clean separation from web layer).
+"""
+
 from __future__ import annotations
 
 import logging

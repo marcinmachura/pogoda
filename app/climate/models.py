@@ -1,3 +1,17 @@
+"""Core data structures and compact climate dataset accessor.
+
+WHAT: Pure data containers (dataclasses) for climate records &
+classification plus `CompactClimateModel` which reads a space‑efficient
+pickle of flattened numeric arrays and exposes extraction & nearest location
+lookup, with a simple module‑level cache helper.
+
+WHY HERE: Keeps domain data representations and on‑disk model interaction
+logic decoupled from API schemas (Pydantic) and service orchestration. The
+model reading code is intentionally lightweight (no external services) to
+facilitate rapid unit tests and potential reuse (CLI tools, batch jobs).
+External dependencies: local filesystem only; no network I/O.
+"""
+
 from __future__ import annotations
 from pathlib import Path
 from typing import List, Dict, Tuple, Optional

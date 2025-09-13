@@ -1,3 +1,18 @@
+"""Command line interface for climate classification (currently stale).
+
+WHAT: Intended to provide a CLI wrapper around `ClimateService` for
+fetching yearly or aggregated climate data.
+
+STATUS / ISSUE: The code calls `ClimateService.fetch(...)` which no longer
+exists in the service implementation (API shifted to
+`get_aggregated_climate_data` / `get_yearly_climate_data`). This script is
+therefore non-functional and needs refactor or removal.
+
+WHY HERE: Scripts folder collects operational utilities (model building,
+CLI). No external APIs beyond those used indirectly via the service
+(Nominatim + local model files).
+"""
+
 import argparse
 from app.climate.service import ClimateService
 
@@ -10,12 +25,16 @@ def main():
     args = parser.parse_args()
 
     service = ClimateService()
-    resp = service.fetch(args.place, args.start_year, args.end_year, aggregate=args.aggregate)
-    if args.aggregate and resp.aggregate:
-        agg = resp.aggregate
-        print(f"Aggregate {agg.place} {agg.start_year}-{agg.end_year}: mean_temp={agg.mean_temp_c}C total_precip={agg.total_precip_mm}mm dominant={agg.dominant_classification}")
-    for r in resp.records:
-        print(f"{r.year}: {r.avg_temp_c}C {r.precipitation_mm}mm {r.classification}")
+    # DEAD CODE: Original fetch interface removed. Placeholder logic below
+    # demonstrates how a refactored CLI might look; keeping failure to
+    # highlight required maintenance instead of silently drifting.
+    print("ERROR: 'ClimateService.fetch' no longer exists. Update CLI to use new service methods.")
+    # Example future adaptation (pseudo):
+    # if args.aggregate:
+    #     loc, temps, precips, classification, dist = service.get_aggregated_climate_data(args.place, list(range(args.start_year, args.end_year+1)))
+    # else:
+    #     loc, year_map, dist = service.get_yearly_climate_data(args.place, list(range(args.start_year, args.end_year+1)))
+    # print(...)
 
 if __name__ == "__main__":
     main()

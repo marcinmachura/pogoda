@@ -1,10 +1,25 @@
+"""Climate API route handlers (version 1).
+
+WHAT: Defines FastAPI endpoints for aggregated and yearly climate
+classification queries. Translates validated request payloads into service
+layer calls and structures responses with Pydantic schemas. Adds
+observability via logging and consistent error mapping to HTTP responses.
+
+WHY HERE: Versioned routing module (`/api/v1/climate`) keeps endpoint
+concerns (serialization, HTTP errors) separate from domain logic in
+`app.climate.service`. External dependencies involved indirectly:
+    * OpenStreetMap Nominatim (via `ClimateService` -> geocoding)
+    * Local compact climate model pickle files (via service)
+No direct external API calls originate in this file; it orchestrates.
+"""
+
 import logging
 from fastapi import APIRouter, Depends, HTTPException
 from app.climate.service import ClimateService
 from ..schemas import (
-    ClimateRequest, ErrorResponse, LocationData, 
-    ClimateClassificationData, AggregatedClimateResponse, 
-    AggregatedClimateData, YearlyClimateResponse
+        ClimateRequest, ErrorResponse, LocationData, 
+        ClimateClassificationData, AggregatedClimateResponse, 
+        AggregatedClimateData, YearlyClimateResponse
 )
 
 logger = logging.getLogger(__name__)

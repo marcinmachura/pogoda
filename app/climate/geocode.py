@@ -1,3 +1,15 @@
+"""Geocoding utilities using OpenStreetMap Nominatim.
+
+WHAT: Provides `GeocodingService` to translate city names to coordinates
+with minimal fields captured in `GeoLocation` dataclass. Wraps HTTP calls
+and normalizes error handling via `GeocodeError`.
+
+WHY HERE: Lives in climate domain package because geocoding is prerequisite
+for climate model lookup; isolates external API specifics (Nominatim
+endpoint, headers, timeouts) from higher-level service logic.
+External dependency: OpenStreetMap Nominatim public API.
+"""
+
 from __future__ import annotations
 import requests
 from typing import Tuple, Optional

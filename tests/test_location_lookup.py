@@ -129,8 +129,19 @@ class TestCompactClimateModel(unittest.TestCase):
         self.model = CompactClimateModel(Path(self.temp_file.name))
     
     def tearDown(self):
-        """Clean up test file."""
-        Path(self.temp_file.name).unlink(missing_ok=True)
+        """Clean up test file with Windows retry to avoid PermissionError."""
+        path = Path(self.temp_file.name)
+        if path.exists():
+            try:
+                path.unlink(missing_ok=True)
+            except PermissionError:
+                import time
+                time.sleep(0.1)
+                try:
+                    path.unlink(missing_ok=True)
+                except PermissionError:
+                    # Leave file; test environment limitation.
+                    pass
     
     def test_exact_location_data_extraction(self):
         """Test extracting data for an exact location match."""
@@ -191,7 +202,18 @@ class TestCompactClimateModel(unittest.TestCase):
             with self.assertRaises(ValueError):
                 model.find_closest_location(51.5, -0.1)
         finally:
-            Path(temp_file.name).unlink(missing_ok=True)
+            # Robust cleanup with retry for Windows
+            temp_path = Path(temp_file.name)
+            if temp_path.exists():
+                try:
+                    temp_path.unlink(missing_ok=True)
+                except PermissionError:
+                    import time
+                    time.sleep(0.1)
+                    try:
+                        temp_path.unlink(missing_ok=True)
+                    except PermissionError:
+                        pass
 
 
 class TestClimateService(unittest.TestCase):
@@ -287,7 +309,17 @@ class TestClimateModelCaching(unittest.TestCase):
             self.assertIs(model1, model2)
             
         finally:
-            Path(temp_file.name).unlink(missing_ok=True)
+            temp_path = Path(temp_file.name)
+            if temp_path.exists():
+                try:
+                    temp_path.unlink(missing_ok=True)
+                except PermissionError:
+                    import time
+                    time.sleep(0.1)
+                    try:
+                        temp_path.unlink(missing_ok=True)
+                    except PermissionError:
+                        pass
 
 
 if __name__ == '__main__':
