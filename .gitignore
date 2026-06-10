@@ -28,3 +28,6 @@ build/
 bin/
 obj/
 data/models/climate_optimized.json
+out/
+data/
+climateData/
