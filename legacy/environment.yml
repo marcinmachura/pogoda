@@ -1,0 +1,11 @@
+name: pogoda
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - pip
+  - pip:
+      - geopy>=2.4.1
+      - requests>=2.31.0
+      - pydantic>=2.7.0
+# After creating & activating, run: pip install -e .

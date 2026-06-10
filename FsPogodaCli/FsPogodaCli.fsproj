@@ -1,0 +1,17 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net9.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="ClimateClassifier.fs" />
+    <Compile Include="ClimateReader.fs" />
+    <Compile Include="CompactClimateModel.fs" />
+    <Compile Include="BinaryModel.fs" />
+    <Compile Include="BatchClassifier.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+</Project>
